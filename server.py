@@ -15,14 +15,11 @@
 import numpy as np
 import pandas as pd
 from sklearn import preprocessing, cross_validation, linear_model, metrics
-from flask import Flask
-from flask import request
-from flask import Response
-from flask import jsonify
+from flask import Flask, request, Response, jsonify, send_from_directory
 import pickle
 
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path="")
 app.debug = False
 
 t_reference = "2012-06-01T00:00:01Z"
@@ -52,6 +49,9 @@ def getBadInputResponse(msg="Bad Request"):
 	return Response(response=msg, status=400, mimetype="text/plain")
 
 
+@app.route("/coral_analysis/static/<path>", methods=["GET"])
+def getStaticFile(path):
+	return send_from_directory("public", path)
 
 
 @app.route("/coral_analysis/features", methods=["GET"])
