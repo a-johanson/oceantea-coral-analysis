@@ -37,8 +37,8 @@ with open(loadPrefix+"scalar_POS434-156_potentialDensityAnomaly_215_original.jso
 
 dateOffset = np.datetime64("2012-06-01T00:00:01Z")
 
-hiResIndexStart = 336185 # in [s]
-hiResIndexEnd = 1342685 # in [s] --- shorter: 1342685 --- longer: 9332570
+hiResIndexStart = 354185 # in [s]
+hiResIndexEnd = 1343285 # in [s] --- shorter: 1342685 --- longer: 9332570
 hiResIndexStep = 600 # in [s]
 hiResIndex = dateOffset + np.arange(hiResIndexStart, hiResIndexEnd, hiResIndexStep).astype("timedelta64[s]")
 
@@ -115,12 +115,12 @@ def addUnivariateProductsToDF(df, targetName, targetTSIndex, sourceTS, offsetsIn
 
 print("k =", labels.shape[0])
 
-addUnivariateProductsToDF(loResDF, "ct", loResIndex, ctOrig)
-addUnivariateProductsToDF(hiResDF, "ct", hiResIndex, ctOrig)
-addUnivariateProductsToDF(loResDF, "sa", loResIndex, saOrig)
-addUnivariateProductsToDF(hiResDF, "sa", hiResIndex, saOrig)
-addUnivariateProductsToDF(loResDF, "sigma0", loResIndex, sigma0Orig)
-addUnivariateProductsToDF(hiResDF, "sigma0", hiResIndex, sigma0Orig)
+addUnivariateProductsToDF(loResDF, "conservTemp", loResIndex, ctOrig)
+addUnivariateProductsToDF(hiResDF, "conservTemp", hiResIndex, ctOrig)
+addUnivariateProductsToDF(loResDF, "absSalinity", loResIndex, saOrig)
+addUnivariateProductsToDF(hiResDF, "absSalinity", hiResIndex, saOrig)
+addUnivariateProductsToDF(loResDF, "sigmaTheta", loResIndex, sigma0Orig)
+addUnivariateProductsToDF(hiResDF, "sigmaTheta", hiResIndex, sigma0Orig)
 
 #print(hiResDF)
 #assert False

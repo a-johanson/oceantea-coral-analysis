@@ -2,6 +2,36 @@
 <script src="js/colors_simple.js" charset="utf-8"></script>
 <script src="coral_analysis/static/coral_analysis.js" charset="utf-8"></script>
 
-<ul id="CAFeatureList" style="list-style-type: none; column-width: 250px;"></ul>
+<div class="row" id="rowSettings">
+	<div class="col-xs-12">
+		<div id="settingsPanel" class="panel panel-default">
+			<div class="panel-heading">Model Properties</div>
+			<div class="panel-body">
 
-<div id="CAPlot"></div>
+				<p style="margin: 0px;"><b>Features</b></p>
+				<ul id="CAFeatureList" style="list-style-type: none; column-width: 250px;"></ul>
+
+				<p style="margin: 5px 0px 5px 0px;"><b>Seed for RNG (leave blank for random model)</b></p>
+				<input type="text" placeholder="Seed number" id="inputCASeed" class="form-control" style="width: 10em"></label>
+
+				<p style="margin: 20px 0px 0px 0px;">
+					<button class="btn btn-primary" id="buttonAddModel">Add Model</button>
+					<button class="btn btn-info" id="buttonShare">Share Model</button>
+					<button class="btn btn-danger" id="buttonClearFeatures">Clear Features</button>
+					<button class="btn btn-danger" id="buttonClearModels">Clear Models</button>
+				</p>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row" id="rowVisualization">
+	<div class="col-xs-12">
+		<div id="visPanel" class="panel panel-default">
+			<div class="panel-heading">Predictions</div>
+			<div class="panel-body">
+				<div id="CAPlot"></div>
+			</div>
+		</div>
+	</div>
+</div>
