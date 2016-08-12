@@ -108,7 +108,7 @@ def addUnivariateProductsToDF(df, targetName, targetTSIndex, sourceTS, offsetsIn
 
 	# lags
 	for lag in offsetsInMin:
-		name = "{}_lag_{}min".format(targetName, abs(lag))
+		name = "{}_lag_{}h".format(targetName, int(abs(lag)/60))
 		df.loc[:,name] = interpolateUnivariateTSLinear(targetTSIndex, sourceTS, offset=np.timedelta64(lag, "m"))
 
 
@@ -185,7 +185,7 @@ def addMultivariateProductsToDF(df, targetName, targetTSIndex, sourceDF, pcas=No
 
 	# lags
 	for lag in offsetsInMin:
-		name = "{}_lag_{}min".format(targetName, abs(lag))
+		name = "{}_lag_{}h".format(targetName, int(abs(lag)/60))
 		data = interpolateMultivariateTSLinear(targetTSIndex, sourceDF, name, colOffset=colOffset, angles=angles, offset=np.timedelta64(lag, "m"))
 		addDataAndPCA(df, newPCAs, data, name, targetTSIndex, pcas, nComponents)
 	
@@ -220,7 +220,8 @@ labels.to_pickle(outputPrefix+"labels.pkl")
 loResDF.to_pickle(outputPrefix+"lo_res_df.pkl")
 hiResDF.to_pickle(outputPrefix+"hi_res_df.pkl")
 
-with open(outputPrefix+"features.pkl", "wb") as fp:
-	pickle.dump(loResDF.columns.values.tolist(), fp)
+with open(outputPrefix+"features_generated.json", "w") as fp:
+	features = list(map(lambda s: {"id": s, "name": s}, loResDF.columns.values.tolist()))
+	json.dump({"features": features}, fp, indent=1)
 
 print("Output files written")

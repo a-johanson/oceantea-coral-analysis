@@ -1,6 +1,18 @@
 
-<script src="js/colors_simple.js" charset="utf-8"></script>
 <script src="coral_analysis/static/coral_analysis.js" charset="utf-8"></script>
+
+<div class="row" id="rowIntro">
+	<div class="col-xs-12">
+		<div id="visPanel" class="panel panel-default">
+			<div class="panel-heading">Introduction</div>
+			<div class="panel-body">
+				<div style="column-width: 30em;">
+					This view...
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 
 <div class="row" id="rowSettings">
 	<div class="col-xs-12">
@@ -9,13 +21,16 @@
 			<div class="panel-body">
 
 				<p style="margin: 0px;"><b>Features</b></p>
-				<ul id="CAFeatureList" style="list-style-type: none; column-width: 250px;"></ul>
+				<ul id="CAFeatureList" style="list-style-type: none; column-width: 20em;"></ul>
 
 				<p style="margin: 5px 0px 5px 0px;"><b>Seed for RNG (leave blank for random model)</b></p>
 				<input type="text" placeholder="Seed number" id="inputCASeed" class="form-control" style="width: 10em"></label>
 
 				<p style="margin: 20px 0px 0px 0px;">
 					<button class="btn btn-primary" id="buttonAddModel">Add Model</button>
+					<button class="btn btn-primary" id="buttonAddModel1F">Add Best 1F Model</button>
+					<button class="btn btn-primary" id="buttonAddModel2F">Add Best 2F Model</button>
+					<button class="btn btn-primary" id="buttonAddModel6F">Add Best 6F Model</button>
 					<!-- <button class="btn btn-info" id="buttonShare">Share Model</button> -->
 					<button class="btn btn-danger" id="buttonClearFeatures">Clear Features</button>
 					<button class="btn btn-danger" id="buttonClearModels">Clear Models</button>

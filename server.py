@@ -17,6 +17,7 @@ import pandas as pd
 from sklearn import preprocessing, cross_validation, linear_model, metrics
 from flask import Flask, request, Response, jsonify, send_from_directory
 import pickle
+import json
 
 
 app = Flask(__name__, static_url_path="")
@@ -27,8 +28,9 @@ dateOffset = np.datetime64(t_reference)
 
 try:
 	dataPath = "./data/"
-	with open(dataPath+"features.pkl", "rb") as fp:
-		features = pickle.load(fp)
+	with open(dataPath+"features.json", "r") as fp:
+		features = json.load(fp)["features"]
+		featureIDs = list(map(lambda f: f["id"], features))
 	with open(dataPath+"labels.pkl", "rb") as fp:
 		labels = pickle.load(fp)
 	with open(dataPath+"lo_res_df.pkl", "rb") as fp:
@@ -37,6 +39,7 @@ try:
 		hiResDF = pickle.load(fp)
 except:
 	features = []
+	featureIDs = []
 	labels = None
 	loResDF = None
 	hiResDF = None
@@ -71,7 +74,7 @@ def getObservations():
 
 @app.route("/coral_analysis/model", methods=["GET"])
 def getModel():
-	global features, labels, loResDF, hiResDF, t_reference, dateOffset
+	global features, featureIDs, labels, loResDF, hiResDF, t_reference, dateOffset
 	if labels is None or loResDF is None or hiResDF is None:
 		return getServerErrorResponse()
 	if not ("features" in request.args) or request.args["features"] == "":
@@ -79,7 +82,7 @@ def getModel():
 	
 	reqFeatures = request.args["features"].split(",")
 	for f in reqFeatures:
-		if not (f in features):
+		if not (f in featureIDs):
 			return getBadInputResponse("Unknown Feature: {}".format(f))
 	
 	seed = None
@@ -96,6 +99,7 @@ def getModel():
 
 	scaler = preprocessing.StandardScaler()
 	scaler.fit(X_train)
+	X_std = scaler.transform(X)
 	X_train_std = scaler.transform(X_train)
 	X_test_std = scaler.transform(X_test)
 
@@ -103,17 +107,29 @@ def getModel():
 	classifier.fit(X_train_std, y_train)
 
 	predictions_test = classifier.predict(X_test_std)
-	accuracy = metrics.accuracy_score(y_test, predictions_test)
+	accuracy_test = metrics.accuracy_score(y_test, predictions_test)
+
+	predictions_overall = classifier.predict(X_std)
+	accuracy_overall = metrics.accuracy_score(y, predictions_overall)
 
 	X_hiRes = hiResDF.loc[:,reqFeatures].values
 	X_hiRes_std = scaler.transform(X_hiRes)
 	p_prediction_hiRes = classifier.predict_proba(X_hiRes_std)[:,1]
 	hiResTS = list(map(lambda t,x: [int((t-dateOffset)/np.timedelta64(1, "s")),x], hiResDF.index.values, p_prediction_hiRes))
+
+	reqFeatureNames = []
+	for f in reqFeatures:
+		for fwn in features:
+			if f == fwn["id"]:
+				reqFeatureNames.append(fwn["name"])
+				break
 	
 	return jsonify({"features": reqFeatures,\
+		"featureNames": reqFeatureNames,\
 		"coefficients": classifier.coef_[0,:].tolist(),\
 		"intercept": classifier.intercept_[0],\
-		"accuracy_test": accuracy,\
+		"accuracy_test": accuracy_test,\
+		"accuracy_overall": accuracy_overall,\
 		"t_reference": t_reference,\
 		"p_prediction": hiResTS})
 

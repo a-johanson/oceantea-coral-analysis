@@ -1,0 +1,180 @@
+{
+ "features": [
+  {
+   "id": "conservTemp",
+   "name": "Temperature (cons.)"
+  },
+  {
+   "id": "conservTemp_lag_2h",
+   "name": "Temperature (cons.), 2h lag"
+  },
+  {
+   "id": "conservTemp_lag_3h",
+   "name": "Temperature (cons.), 3h lag"
+  },
+  {
+   "id": "conservTemp_lag_4h",
+   "name": "Temperature (cons.), 4h lag"
+  },
+  {
+   "id": "absSalinity",
+   "name": "Salinity (abs.)"
+  },
+  {
+   "id": "absSalinity_lag_2h",
+   "name": "Salinity (abs.), 2h lag"
+  },
+  {
+   "id": "absSalinity_lag_3h",
+   "name": "Salinity (abs.), 3h lag"
+  },
+  {
+   "id": "absSalinity_lag_4h",
+   "name": "Salinity (abs.), 4h lag"
+  },
+  {
+   "id": "sigmaTheta",
+   "name": "\u03C3_\u03B8-density"
+  },
+  {
+   "id": "sigmaTheta_lag_2h",
+   "name": "\u03C3_\u03B8-density, 2h lag"
+  },
+  {
+   "id": "sigmaTheta_lag_3h",
+   "name": "\u03C3_\u03B8-density, 3h lag"
+  },
+  {
+   "id": "sigmaTheta_lag_4h",
+   "name": "\u03C3_\u03B8-density, 4h lag"
+  },
+  {
+   "id": "dirUp_pc1",
+   "name": "Direction up, PC1"
+  },
+  {
+   "id": "dirUp_lag_2h_pc1",
+   "name": "Direction up, 2h lag, PC1"
+  },
+  {
+   "id": "dirUp_lag_3h_pc1",
+   "name": "Direction up, 3h lag, PC1"
+  },
+  {
+   "id": "dirUp_lag_4h_pc1",
+   "name": "Direction up, 4h lag, PC1"
+  },
+  {
+   "id": "magUp_pc1",
+   "name": "Velocity up, PC1"
+  },
+  {
+   "id": "magUp_lag_2h_pc1",
+   "name": "Velocity up, 2h lag, PC1"
+  },
+  {
+   "id": "magUp_lag_3h_pc1",
+   "name": "Velocity up, 3h lag, PC1"
+  },
+  {
+   "id": "magUp_lag_4h_pc1",
+   "name": "Velocity up, 4h lag, PC1"
+  },
+  {
+   "id": "dirDown_pc1",
+   "name": "Direction down, PC1"
+  },
+  {
+   "id": "dirDown_pc2",
+   "name": "Direction down, PC2"
+  },
+  {
+   "id": "dirDown_pc3",
+   "name": "Direction down, PC3"
+  },
+  {
+   "id": "dirDown_lag_2h_pc1",
+   "name": "Direction down, 2h lag, PC1"
+  },
+  {
+   "id": "dirDown_lag_2h_pc2",
+   "name": "Direction down, 2h lag, PC2"
+  },
+  {
+   "id": "dirDown_lag_2h_pc3",
+   "name": "Direction down, 2h lag, PC3"
+  },
+  {
+   "id": "dirDown_lag_3h_pc1",
+   "name": "Direction down, 3h lag, PC1"
+  },
+  {
+   "id": "dirDown_lag_3h_pc2",
+   "name": "Direction down, 3h lag, PC2"
+  },
+  {
+   "id": "dirDown_lag_3h_pc3",
+   "name": "Direction down, 3h lag, PC3"
+  },
+  {
+   "id": "dirDown_lag_4h_pc1",
+   "name": "Direction down, 4h lag, PC1"
+  },
+  {
+   "id": "dirDown_lag_4h_pc2",
+   "name": "Direction down, 4h lag, PC2"
+  },
+  {
+   "id": "dirDown_lag_4h_pc3",
+   "name": "Direction down, 4h lag, PC3"
+  },
+  {
+   "id": "magDown_pc1",
+   "name": "Velocity down, PC1"
+  },
+  {
+   "id": "magDown_pc2",
+   "name": "Velocity down, PC2"
+  },
+  {
+   "id": "magDown_pc3",
+   "name": "Velocity down, PC3"
+  },
+  {
+   "id": "magDown_lag_2h_pc1",
+   "name": "Velocity down, 2h lag, PC1"
+  },
+  {
+   "id": "magDown_lag_2h_pc2",
+   "name": "Velocity down, 2h lag, PC2"
+  },
+  {
+   "id": "magDown_lag_2h_pc3",
+   "name": "Velocity down, 2h lag, PC3"
+  },
+  {
+   "id": "magDown_lag_3h_pc1",
+   "name": "Velocity down, 3h lag, PC1"
+  },
+  {
+   "id": "magDown_lag_3h_pc2",
+   "name": "Velocity down, 3h lag, PC2"
+  },
+  {
+   "id": "magDown_lag_3h_pc3",
+   "name": "Velocity down, 3h lag, PC3"
+  },
+  {
+   "id": "magDown_lag_4h_pc1",
+   "name": "Velocity down, 4h lag, PC1"
+  },
+  {
+   "id": "magDown_lag_4h_pc2",
+   "name": "Velocity down, 4h lag, PC2"
+  },
+  {
+   "id": "magDown_lag_4h_pc3",
+   "name": "Velocity down, 4h lag, PC3"
+  }
+ ]
+}

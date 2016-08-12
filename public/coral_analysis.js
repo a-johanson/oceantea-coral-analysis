@@ -1,12 +1,12 @@
 
 var caPlotColors = [
-	"orange",
-	"maroon",
-	"green",
-	"indigo",
-	"gold",
 	"indianred",
 	"darkcyan",
+	"green",
+	"orange",
+	"maroon",
+	"indigo",
+	"gold",
 	"darkkhaki",
 	"blueviolet",
 	"lightsalmon",
@@ -56,17 +56,11 @@ function getCAPlotSize() {
 	return [window.innerWidth-margin, Math.round(height2Width*(window.innerWidth-margin))];
 }
 
-function toggleAddModelButton(disabled) {
-	if(disabled) {
-		$("#buttonAddModel").prop("disabled", true)
-			.empty()
-			.append('<span class="fa fa-spinner fa-pulse"></span> Retrieving...');
-	}
-	else {
-		$("#buttonAddModel").prop("disabled", false)
-			.empty()
-			.append('Add Model');
-	}
+function toggleAddModelButtons(disabled) {
+	$("#buttonAddModel").prop("disabled", disabled);
+	$("#buttonAddModel1F").prop("disabled", disabled);
+	$("#buttonAddModel2F").prop("disabled", disabled);
+	$("#buttonAddModel6F").prop("disabled", disabled);
 }
 
 function rightPadStr2Len(str, n) {
@@ -86,7 +80,7 @@ function loadAndDisplayModel(features, seed) {
 		type: "GET",
 		cache: false,
 		success: function(retdata) {
-			toggleAddModelButton(false);
+			toggleAddModelButtons(false);
 			
 			var t_ref = new Date(retdata.t_reference);
 			retdata.p_prediction = retdata.p_prediction.map(function(d) {
@@ -95,32 +89,33 @@ function loadAndDisplayModel(features, seed) {
 				return [t, d[1]];
 			});
 
-			var modelName = "Model ("+(features.length<=3 ? features.join(", ") : features.length+" Features")+")";
-			var modelID = "model"+features.join();
+			var modelName = "Model ("+(retdata.features.length<=2 ? retdata.featureNames.join("; ") : retdata.features.length+" Features")+")";
+			var modelID = "model"+retdata.features.join();
 			caPlot.addDataSet(modelID, modelName, retdata.p_prediction, caPlotColors[caCurrentColor], false);
 			caCurrentColor = (caCurrentColor+1)%caPlotColors.length;
 			caUniqueModelNames.push(modelID);
 
-			padLen = 25;
+			padLen = 30;
 			$("#CAModelStats").append('----------------------\n')
-				.append('Model with '+features.length+' features\n')
+				.append('Model with '+retdata.features.length+' feature'+(retdata.features.length>1 ? "s" : "")+'\n')
 				.append('Test accuracy: '+retdata.accuracy_test+'\n')
+				.append('Overall accuracy: '+retdata.accuracy_overall+'\n')
 				.append('Coefficients:\n')
 				.append('  '+rightPadStr2Len("Intercept:", padLen)+' '+formatFloat(retdata.intercept)+'\n');
 			retdata.features.forEach(function(f, i) {
-				$("#CAModelStats").append('  '+rightPadStr2Len(f+":", padLen)+' '+formatFloat(retdata.coefficients[i])+'\n');
+				$("#CAModelStats").append('  '+rightPadStr2Len(retdata.featureNames[i]+":", padLen)+' '+formatFloat(retdata.coefficients[i])+'\n');
 			});
 			$("#CAModelStats").scrollTop($("#CAModelStats")[0].scrollHeight - $("#CAModelStats").height());
 		},
 		error: function() {
-			toggleAddModelButton(false);
+			toggleAddModelButtons(false);
 		}
 	});
 }
 
 function initCAGUI() {
 	caFeatures.forEach(function(f) {
-		$("#CAFeatureList").append('<li class="checkbox"><label><input type="checkbox" id="CABox_'+f+'"> '+f+'</label></li>');
+		$("#CAFeatureList").append('<li class="checkbox"><label><input type="checkbox" id="CABox_'+f.id+'"> '+f.name+'</label></li>');
 	});
 	
 	caPlot = new CanvasTimeSeriesPlot(d3.select("#CAPlot"), getCAPlotSize(), {
@@ -140,7 +135,7 @@ function initCAGUI() {
 
 	$("#buttonClearFeatures").click(function() {
 		caFeatures.forEach(function(f) {
-			$("#CABox_"+f).prop("checked", false);
+			$("#CABox_"+f.id).prop("checked", false);
 		});
 	});
 
@@ -152,17 +147,35 @@ function initCAGUI() {
 		caUniqueModelNames = [];
 	});
 
+	$("#buttonAddModel1F").click(function() {
+		toggleAddModelButtons(true);
+		var modelSeed = parseInt($("#inputCASeed").val());
+		loadAndDisplayModel(["dirUp_lag_3h_pc1"], modelSeed);
+	});
+
+	$("#buttonAddModel2F").click(function() {
+		toggleAddModelButtons(true);
+		var modelSeed = parseInt($("#inputCASeed").val());
+		loadAndDisplayModel(["dirUp_lag_4h_pc1", "magUp_lag_2h_pc1"], modelSeed);
+	});
+
+	$("#buttonAddModel6F").click(function() {
+		toggleAddModelButtons(true);
+		var modelSeed = parseInt($("#inputCASeed").val());
+		loadAndDisplayModel(["dirUp_lag_3h_pc1", "magUp_lag_2h_pc1", "dirUp_lag_4h_pc1", "magDown_lag_3h_pc2", "magDown_lag_3h_pc3", "magDown_lag_2h_pc2"], modelSeed);
+	});
+
 	$("#buttonAddModel").click(function() {
-		toggleAddModelButton(true);
+		toggleAddModelButtons(true);
 		
 		var modelFeatures = [];
 		caFeatures.forEach(function(f) {
-			if($("#CABox_"+f).is(":checked")) {
-				modelFeatures.push(f);
+			if($("#CABox_"+f.id).is(":checked")) {
+				modelFeatures.push(f.id);
 			}
 		});
 		if(modelFeatures.length == 0) {
-			toggleAddModelButton(false);
+			toggleAddModelButtons(false);
 			return;
 		}
 
