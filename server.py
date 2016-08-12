@@ -110,7 +110,12 @@ def getModel():
 	p_prediction_hiRes = classifier.predict_proba(X_hiRes_std)[:,1]
 	hiResTS = list(map(lambda t,x: [int((t-dateOffset)/np.timedelta64(1, "s")),x], hiResDF.index.values, p_prediction_hiRes))
 	
-	return jsonify({"features": reqFeatures, "accuracy_test": accuracy, "t_reference": t_reference, "p_prediction": hiResTS})
+	return jsonify({"features": reqFeatures,\
+		"coefficients": classifier.coef_[0,:].tolist(),\
+		"intercept": classifier.intercept_[0],\
+		"accuracy_test": accuracy,\
+		"t_reference": t_reference,\
+		"p_prediction": hiResTS})
 
 
 

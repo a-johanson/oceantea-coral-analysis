@@ -21,6 +21,7 @@ caCurrentColor = 0;
 var caPlot = null;
 var caFeatures = null;
 var caObservations = null;
+var caUniqueModelNames = [];
 
 $(document).ready(function() {
 	$.getJSON("/coral_analysis/features", function(data) {
@@ -68,15 +69,62 @@ function toggleAddModelButton(disabled) {
 	}
 }
 
+function rightPadStr2Len(str, n) {
+	if(str.length >= n) {
+		return str;
+	}
+	return str+(" ".repeat(n-str.length));
+}
+
+function formatFloat(f) {
+	return (f>=0 ? " "+f : f.toString());
+}
+
+function loadAndDisplayModel(features, seed) {
+	$.ajax({
+		url: "/coral_analysis/model?features="+features.join()+(seed && !isNaN(seed) ? "&seed="+seed : ""),
+		type: "GET",
+		cache: false,
+		success: function(retdata) {
+			toggleAddModelButton(false);
+			
+			var t_ref = new Date(retdata.t_reference);
+			retdata.p_prediction = retdata.p_prediction.map(function(d) {
+				var t = new Date(t_ref);
+				t.setUTCSeconds(t.getUTCSeconds()+d[0]);
+				return [t, d[1]];
+			});
+
+			var modelName = "Model ("+(features.length<=3 ? features.join(", ") : features.length+" Features")+")";
+			var modelID = "model"+features.join();
+			caPlot.addDataSet(modelID, modelName, retdata.p_prediction, caPlotColors[caCurrentColor], false);
+			caCurrentColor = (caCurrentColor+1)%caPlotColors.length;
+			caUniqueModelNames.push(modelID);
+
+			padLen = 25;
+			$("#CAModelStats").append('----------------------\n')
+				.append('Model with '+features.length+' features\n')
+				.append('Test accuracy: '+retdata.accuracy_test+'\n')
+				.append('Coefficients:\n')
+				.append('  '+rightPadStr2Len("Intercept:", padLen)+' '+formatFloat(retdata.intercept)+'\n');
+			retdata.features.forEach(function(f, i) {
+				$("#CAModelStats").append('  '+rightPadStr2Len(f+":", padLen)+' '+formatFloat(retdata.coefficients[i])+'\n');
+			});
+			$("#CAModelStats").scrollTop($("#CAModelStats")[0].scrollHeight - $("#CAModelStats").height());
+		},
+		error: function() {
+			toggleAddModelButton(false);
+		}
+	});
+}
+
 function initCAGUI() {
 	caFeatures.forEach(function(f) {
 		$("#CAFeatureList").append('<li class="checkbox"><label><input type="checkbox" id="CABox_'+f+'"> '+f+'</label></li>');
 	});
 	
 	caPlot = new CanvasTimeSeriesPlot(d3.select("#CAPlot"), getCAPlotSize(), {
-		yAxisLabel: "p_Extension",
-		markerLineWidth: 3,
-		markerRadius: 5
+		yAxisLabel: "p_Extension"
 	});
 	caPlot.setZoomYAxis(false);
 	caPlot.addDataSet("observations", "Observations", caObservations, "steelblue", true);
@@ -88,6 +136,20 @@ function initCAGUI() {
 
 	$(window).resize(function() {
 		caPlot.resize(getCAPlotSize());
+	});
+
+	$("#buttonClearFeatures").click(function() {
+		caFeatures.forEach(function(f) {
+			$("#CABox_"+f).prop("checked", false);
+		});
+	});
+
+	$("#buttonClearModels").click(function() {
+		$("#CAModelStats").empty();
+		caUniqueModelNames.forEach(function(s) {
+			caPlot.removeDataSet(s);
+		});
+		caUniqueModelNames = [];
 	});
 
 	$("#buttonAddModel").click(function() {
@@ -104,31 +166,8 @@ function initCAGUI() {
 			return;
 		}
 
-		var modelSeed = parseInt($("#inputCASeed"));
+		var modelSeed = parseInt($("#inputCASeed").val());
 
-		$.ajax({
-			url: "/coral_analysis/model?features="+modelFeatures.join()+(!isNaN(modelSeed) ? "&seed="+modelSeed : ""),
-			type: "GET",
-			cache: false,
-			success: function(retdata) {
-				toggleAddModelButton(false);
-				
-				var t_ref = new Date(retdata.t_reference);
-				retdata.p_prediction = retdata.p_prediction.map(function(d) {
-					var t = new Date(t_ref);
-					t.setUTCSeconds(t.getUTCSeconds()+d[0]);
-					return [t, d[1]];
-				});
-
-				var modelName = "Model ("+(modelFeatures.length<=3 ? modelFeatures.join(", ") : modelFeatures.length+" Features")+")"
-				caPlot.addDataSet("model"+modelFeatures.join(), modelName, retdata.p_prediction, caPlotColors[caCurrentColor], false);
-				caCurrentColor = (caCurrentColor+1)%caPlotColors.length;
-
-				console.log(retdata);
-			},
-			error: function() {
-				toggleAddModelButton(false);
-			}
-		});
+		loadAndDisplayModel(modelFeatures, modelSeed);
 	});
 }

@@ -16,7 +16,7 @@
 
 				<p style="margin: 20px 0px 0px 0px;">
 					<button class="btn btn-primary" id="buttonAddModel">Add Model</button>
-					<button class="btn btn-info" id="buttonShare">Share Model</button>
+					<!-- <button class="btn btn-info" id="buttonShare">Share Model</button> -->
 					<button class="btn btn-danger" id="buttonClearFeatures">Clear Features</button>
 					<button class="btn btn-danger" id="buttonClearModels">Clear Models</button>
 				</p>
@@ -31,6 +31,17 @@
 			<div class="panel-heading">Predictions</div>
 			<div class="panel-body">
 				<div id="CAPlot"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row" id="rowInfo">
+	<div class="col-xs-12">
+		<div id="visPanel" class="panel panel-default">
+			<div class="panel-heading">Model Statistics</div>
+			<div class="panel-body">
+				<textarea id="CAModelStats" readonly style="width: 100%; height: 30em; font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New,monospace;"></textarea>
 			</div>
 		</div>
 	</div>
