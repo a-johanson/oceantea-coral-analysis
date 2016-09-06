@@ -135,6 +135,11 @@ def getModel():
 
 
 
-if __name__ == '__main__':
-	#app.run(host='0.0.0.0')
-	app.run(threaded=True, port=3340, use_debugger=False, use_reloader=False)
+if __name__ == "__main__":
+	acceptAllHosts = False
+	for arg in sys.argv:
+		if arg == "--acceptAllHosts":
+			acceptAllHosts = True
+			break
+	
+	app.run(host="0.0.0.0" if acceptAllHosts else "127.0.0.1", port=3336, threaded=True, use_debugger=False, use_reloader=False)

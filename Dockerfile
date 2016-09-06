@@ -9,4 +9,4 @@ RUN conda install numpy pandas sklearn flask -y
 COPY . /usr/src/app
 
 EXPOSE 3340
-CMD ["python3","server.py"]
+CMD ["python3","server.py","--acceptAllHosts"]
