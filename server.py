@@ -143,4 +143,4 @@ if __name__ == "__main__":
 			acceptAllHosts = True
 			break
 	
-	app.run(host="0.0.0.0" if acceptAllHosts else "127.0.0.1", port=3336, threaded=True, use_debugger=False, use_reloader=False)
+	app.run(host="0.0.0.0" if acceptAllHosts else "127.0.0.1", port=3340, threaded=True, use_debugger=False, use_reloader=False)
