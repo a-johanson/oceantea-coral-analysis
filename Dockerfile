@@ -4,7 +4,7 @@ MAINTAINER Arne Johanson
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 RUN conda update --all -y
-RUN conda install numpy pandas sklearn flask -y
+RUN conda install numpy pandas scikit-learn flask -y
 
 COPY . /usr/src/app
 
